@@ -50,6 +50,9 @@ try {
         '--quiet',
     ];
 
+    // set default params
+    $params['encoding'] ??= 'utf-8';
+
     foreach ($params as $param => $value) {
         // TODO: reject invalid or unnecessary params  
         // Store Header / Footer in a temp file
@@ -62,6 +65,7 @@ try {
             $cmd[] = $value;
         }
     }
+
 
     // store files to a temp folder and set --allow param for it
     if ($files) {

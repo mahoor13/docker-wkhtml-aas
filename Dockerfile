@@ -6,8 +6,8 @@ RUN chmod +x /usr/local/bin/frankenphp
 
 WORKDIR /app
 
-COPY fonts /usr/share/fonts/extra
-COPY ./ /app/
+COPY ./fonts /usr/share/fonts/extra
+COPY ./index.php ./server.php /app/
 
 EXPOSE 8080
 
