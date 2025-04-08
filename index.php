@@ -42,6 +42,8 @@ $tmpFile['output'] = generateTempFile(null, $format);
 
 if ($html) {
     $tmpFile['html'] = generateTempFile($html);
+    if ($input['debug'] ?? false)
+        copy($tmpFile['html'], '/app/doc.html');
 }
 
 try {
@@ -98,6 +100,8 @@ try {
         2 => ['pipe', 'w'], // stderr
     ];
 
+    if ($input['debug'] ?? false)
+        file_put_contents('doc.sh', implode(' ', $cmd));
     $process = proc_open($cmd, $descriptors, $pipes);
 
     if (!is_resource($process)) {

@@ -1,0 +1,1 @@
+wkhtmltopdf --quiet --orientation Landscape --page-size A4 --margin-top 3 --margin-right 5 --margin-bottom 5 --margin-left 5 --footer-center [page] از [topage] --footer-font-name B Nazanin --footer-font-size 10 --page-width 295 --page-height 210 --encoding utf-8 /tmp/htmlvep1i5mrgjmqaICgOEa.html /tmp/pdfslqmk8lj18qg3KEDMEa.pdf
