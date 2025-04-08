@@ -1,6 +1,9 @@
 FROM surnet/alpine-wkhtmltopdf:3.21.2-0.12.6-full
 
-ADD https://github.com/dunglas/frankenphp/releases/download/v1.5.0/frankenphp-linux-x86_64 /usr/local/bin/frankenphp
+## For older CPUs witout AVX2 support use version 1.1.4  (test with: lscpu | grep avx2)
+ARG FRANKENPHP_VERSION=1.5.0
+
+ADD https://github.com/dunglas/frankenphp/releases/download/v${FRANKENPHP_VERSION}/frankenphp-linux-x86_64 /usr/local/bin/frankenphp
 
 RUN chmod +x /usr/local/bin/frankenphp
 
