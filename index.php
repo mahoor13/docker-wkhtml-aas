@@ -1,6 +1,6 @@
 <?php
 
-set_time_limit(getenv('MAX_EXECUTION_TIME') ?? 30);
+set_time_limit(getenv('MAX_EXECUTION_TIME') ?? 300);
 
 function generateTempFile($content = null, $ext = 'html')
 {
@@ -51,6 +51,8 @@ try {
         $format === 'pdf' ? 'wkhtmltopdf' : 'wkhtmltoimage',
         '--quiet',
     ];
+    $procNum = rand(1000, 9999);
+    error_log(date('[H:i:s] ') . "{$procNum}- New request: format={$format} url={$url} html=" . strlen($html) . " bytes");
 
     // set default params
     $params['encoding'] ??= 'utf-8';
@@ -100,6 +102,7 @@ try {
         2 => ['pipe', 'w'], // stderr
     ];
 
+    error_log(date('[H:i:s] ') . "{$procNum}- Process started");
     if ($input['debug'] ?? false)
         file_put_contents('doc.sh', implode(' ', $cmd));
     $process = proc_open($cmd, $descriptors, $pipes);
@@ -127,13 +130,16 @@ try {
         header('Content-Type: image/' . $format);
         header('Content-Disposition: inline; filename="output.' . $format . '"');
     }
+    error_log(date('[H:i:s] ') . "{$procNum}- Process ended");
     readfile($tmpFile['output']);
+    error_log(date('[H:i:s] ') . "{$procNum}- Output sent");
 } catch (Throwable $e) {
     http_response_code(500);
     echo json_encode([
         'error' => $e->getMessage(),
         'cmd' => implode(' ', $cmd),
     ]);
+    error_log(date('[H:i:s] ') . "{$procNum}- ERROR " . $e->getMessage());
 } finally {
     // cleanup
     foreach ($tmpFile as $tmp)
@@ -142,3 +148,5 @@ try {
     if ($tmpFolder ?? false)
         shell_exec("rm -rf $tmpFolder");
 }
+
+error_log(date('[H:i:s] ') . "{$procNum}- Finished");
