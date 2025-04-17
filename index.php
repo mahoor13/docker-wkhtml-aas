@@ -1,6 +1,7 @@
 <?php
 
 set_time_limit(getenv('MAX_EXECUTION_TIME') ?? 300);
+ignore_user_abort(true);
 
 function generateTempFile($content = null, $ext = 'html')
 {
@@ -28,6 +29,7 @@ $html = $input['html'] ?? null;
 $url = $input['url'] ?? null;
 $params = $input['params'] ?? [];
 $files = $input['files'] ?? [];
+$output = isset($input['output']) ? "/app/output/{$input['output']}" : null;
 
 $uri = strtolower(trim($_SERVER['REQUEST_URI'], '/'));
 $format = in_array($uri, ['png', 'jpg', 'jpeg', 'tiff']) ? $uri : 'pdf';
@@ -131,6 +133,12 @@ try {
         header('Content-Disposition: inline; filename="output.' . $format . '"');
     }
     error_log(date('[H:i:s] ') . "{$procNum}- Process ended");
+    // copy to output
+    if ($output && !file_exists($output)) {
+        copy($tmpFile['output'], $output);
+        error_log(date('[H:i:s] ') . "{$procNum}- Output created: {$output}");
+    }
+
     readfile($tmpFile['output']);
     error_log(date('[H:i:s] ') . "{$procNum}- Output sent");
 } catch (Throwable $e) {
