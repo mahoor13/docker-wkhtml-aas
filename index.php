@@ -137,9 +137,10 @@ try {
     if ($output && !file_exists($output)) {
         copy($tmpFile['output'], $output);
         error_log(date('[H:i:s] ') . "{$procNum}- Output created: {$output}");
+    } else {
+        readfile($tmpFile['output']);
     }
 
-    readfile($tmpFile['output']);
     error_log(date('[H:i:s] ') . "{$procNum}- Output sent");
 } catch (Throwable $e) {
     http_response_code(500);
