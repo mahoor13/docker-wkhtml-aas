@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Read JSON input
 $input = json_decode(file_get_contents('php://input'), true);
 
+$procNum = rand(1000, 9999);
 $html = $input['html'] ?? null;
 $url = $input['url'] ?? null;
 $params = $input['params'] ?? [];
@@ -42,8 +43,7 @@ $tmpFile['output'] = generateTempFile(null, $format);
 
 if ($html) {
     $tmpFile['html'] = generateTempFile($html);
-    if ($input['debug'] ?? false)
-        copy($tmpFile['html'], '/app/doc.html');
+    copy($tmpFile['html'], "./tmp/{$procNum}.html");
 }
 
 try {
@@ -51,7 +51,7 @@ try {
         $format === 'pdf' ? 'wkhtmltopdf' : 'wkhtmltoimage',
         '--quiet',
     ];
-    $procNum = rand(1000, 9999);
+
     error_log(date('[H:i:s] ') . "{$procNum}- New request: format={$format} url={$url} html=" . strlen($html) . " bytes");
 
     // set default params
