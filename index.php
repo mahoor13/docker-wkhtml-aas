@@ -42,7 +42,7 @@ $tmpFile = [];
 $tmpFile['output'] = generateTempFile(null, $format);
 
 if ($html) {
-    $tmpFile['html'] = "/app/tmp/{$procNum}.html"; // generateTempFile($html);
+    $tmpFile['html'] = generateTempFile($html);
     if ($input['debug'] ?? false)
         copy($tmpFile['html'], '/app/doc.html');
 }
