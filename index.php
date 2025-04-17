@@ -29,7 +29,7 @@ $html = $input['html'] ?? null;
 $url = $input['url'] ?? null;
 $params = $input['params'] ?? [];
 $files = $input['files'] ?? [];
-$output = isset($input['output']) ? "/app/output/{$input['output']}" : null;
+$output = !empty($input['output']) ? "/app/output/{$input['output']}" : null;
 
 $uri = strtolower(trim($_SERVER['REQUEST_URI'], '/'));
 $format = in_array($uri, ['png', 'jpg', 'jpeg', 'tiff']) ? $uri : 'pdf';
